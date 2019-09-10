@@ -12,53 +12,51 @@
           <div class="table">
             <el-table
               ref="multipleTable"
+              :height="computeHeight()"
               :data="tableData2"
               tooltip-effect="dark"
               style="width: 100%"
               @select="chooseUser1"
               @row-click="chooseUser"
-              @selection-change="handleSelectionChange"
             >
-              <el-table-column type="selection" width="55"></el-table-column>            
-              <el-table-column prop="url" label="相片" show-overflow-tooltip>
+              <el-table-column type="selection" width="55"></el-table-column>
+              <el-table-column prop="url" label="相片" width="120" show-overflow-tooltip>
                 <template slot-scope="scope">
-                  <img :src="scope.row.url" alt="" class="image">
+                  <img :src="scope.row.url" alt class="image" />
                 </template>
               </el-table-column>
               <el-table-column prop="name" label="姓名" width="120"></el-table-column>
               <el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
               <el-table-column prop="dpt" label="部门" show-overflow-tooltip></el-table-column>
               <el-table-column prop="post" label="职务" show-overflow-tooltip></el-table-column>
-              
             </el-table>
           </div>
         </div>
       </el-main>
     </el-container>
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-         <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-         <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
+      <div class="dialogBlock">
+        <div class="hblock1">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>       
+        </div>
+        <div class="hblock">
+          <div class="semiL"></div>
+          <div class="semiR"></div>
+        </div>
+        <div class="hblock">
+          <div class="semiL"></div>
+          <div class="semiR"></div>
+        </div>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
@@ -70,7 +68,7 @@
 export default {
   data() {
     return {
-      tableData2:[],
+      tableData2: [],
       tableData3: [
         {
           date: "2016-05-03",
@@ -120,48 +118,77 @@ export default {
         resource: "",
         desc: ""
       },
-      formLabelWidth: '120px',
+      formLabelWidth: "120px",
+      imageUrl: '',
+      dialogVisible: false,
     };
   },
   methods: {
-    handleSelectionChange(selection) {},
+    //选择用户--点击table row
     chooseUser(row, event, column) {
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(row);
     },
+    //选择用户--点击checkbox
     chooseUser1(selection, row) {
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(row);
     },
+    //新增用户
     createUser() {
       console.log("create");
-      var _this=this;
-      _this.dialogFormVisible=true;
+      var _this = this;
+      _this.dialogFormVisible = true;
     },
+    //修改用户信息
     modifyUser() {
       console.log("modify");
     },
+    //删除用户
     delUser() {
       console.log("delete");
     },
-    loadUsers(){
-      var _this=this;
-      for(var i=0;i<20;i++){
-        var obj=Object.assign({
-          name:'henry'+i,
-          phone:'13509852145',
-          dpt:'dev',
-          post:'mechandiser',
-          url:'http://dev.bp.zcloudtechs.cn/resource//xxtz/20190723174445402.jpeg'
-        })
+    //计算table高度
+    computeHeight() {
+      var block = $(".table");
+      return block[0] ? block[0].clientHeight : 700;
+    },
+    //加载用户信息
+    loadUsers() {
+      var _this = this;
+      for (var i = 0; i < 20; i++) {
+        var obj = Object.assign({
+          name: "henry" + i,
+          phone: "13509852145",
+          dpt: "dev",
+          post: "mechandiser",
+          url:
+            "http://dev.bp.zcloudtechs.cn/resource//xxtz/20190723174445402.jpeg"
+        });
         _this.tableData2.push(obj);
       }
     },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+      console.log(res,file)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    }
   },
-  mounted(){
-    var _this=this;
+  mounted() {
+    var _this = this;
     _this.loadUsers();
-  },
+  }
 };
 </script>
 <style scoped>
@@ -217,11 +244,60 @@ body > .el-container {
   display: inline-block;
   vertical-align: middle;
 }
-.el-dialog__wrapper /deep/ .el-dialog /deep/ .el-dialog__footer{
-  height:70px;
+.el-dialog__wrapper /deep/ .el-dialog /deep/ .el-dialog__footer {
+  height: 70px;
 }
-.image{
-  height:40px;
-  vertical-align:middle;
+.image {
+  height: 40px;
+  vertical-align: middle;
 }
+.dialogBlock {
+  width: 100%;
+  height: 300px;
+}
+
+.dialogBlock .hblock {
+  width: 100%;
+  height: 99px;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  border-bottom: 1px solid white;
+}
+.dialogBlock .hblock:last-child {
+  border: none;
+}
+.dialogBlock .hblock .semiL {
+  height: 100%;
+  width: 50%;
+  background-color: orangered;
+}
+.dialogBlock .hblock .semiR {
+  height: 100%;
+  width: 50%;
+  background-color: yellowgreen;
+}
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  }
+  .avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+  }
 </style>
