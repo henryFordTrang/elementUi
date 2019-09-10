@@ -5,7 +5,7 @@ import mainPage from './views/mainPage';
 import step from './views/step';
 import personnel from './views/personnel';
 import permision from './views/permision';
-
+import test from './views/test';
 Vue.use(Router);
 
 export default new Router({
@@ -35,6 +35,11 @@ export default new Router({
             path:'/permision',
             name:'permision',
             component:permision
+        },
+        {
+            path:'/test',
+            name:'test',
+            component:test
         },
         {
             path:'*',
