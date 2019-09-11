@@ -32,7 +32,8 @@ Vue.filter('trang',(value)=>{
 Vue.component('nancy',nancy1);
 Vue.prototype.$util={
   basicUrl(){
-    return window.location.pathname.split("/phone")[0];
+    return window.location.href.split("/phone")[0];
+    //return window.location.pathname.split("/phone")[0];
   }
 }
 new Vue({

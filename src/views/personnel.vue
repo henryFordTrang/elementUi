@@ -13,7 +13,7 @@
             <el-table
               ref="multipleTable"
               :height="computeHeight()"
-              :data="tableData2"
+              :data="usersList"
               tooltip-effect="dark"
               style="width: 100%"
               @select="chooseUser1"
@@ -36,30 +36,63 @@
     </el-container>
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
       <div class="dialogBlock">
-        <div class="hblock1">
+        <div class="hblock">
+          <div class="semiL">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :action="uploadUrl"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>       
+          </el-upload>
+          </div>
+          <div class="semiR">
+            <el-input placeholder="请输入密码" v-model="name">
+              <template slot="prepend">姓名:</template>
+            </el-input>
+          </div>
         </div>
         <div class="hblock">
-          <div class="semiL"></div>
-          <div class="semiR"></div>
+          <div class="semiL">
+            <el-input placeholder="请输入姓名" v-model="name">
+              <template slot="prepend">姓名:</template>
+            </el-input>
+          </div>
+          <div class="semiR">
+            <el-input placeholder="请输入手机" v-model="mobile">
+              <template slot="prepend">手机号:</template>
+            </el-input>
+          </div>
         </div>
         <div class="hblock">
-          <div class="semiL"></div>
-          <div class="semiR"></div>
+          <div class="semiL">
+            <el-select v-model="department" clearable placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </div>
+          <div class="semiR">
+            <el-select v-model="position" clearable placeholder="请选择">
+              <el-option
+                v-for="item in postOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </div>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="createCfm">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -68,59 +101,64 @@
 export default {
   data() {
     return {
-      tableData2: [],
-      tableData3: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-08",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-06",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-07",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ],
+      usersList: [],
       multipleSelection: [],
       dialogFormVisible: false,
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
-      },
       formLabelWidth: "120px",
-      imageUrl: '',
       dialogVisible: false,
+      uploadUrl: "",
+      imageUrl: "",
+      name: "",
+      mobile: "",
+      department: "",
+      position: "",
+      options: [
+        {
+          value: "黄金糕",
+          label: "黄金糕"
+        },
+        {
+          value: "双皮奶",
+          label: "双皮奶"
+        },
+        {
+          value: "蚵仔煎",
+          label: "蚵仔煎"
+        },
+        {
+          value: "龙须面",
+          label: "龙须面"
+        },
+        {
+          value: "北京烤鸭",
+          label: "北京烤鸭"
+        }
+      ],
+      postOption: [
+        {
+          value: "前端",
+          label: "前端"
+        },
+        {
+          value: "后端",
+          label: "后端"
+        },
+        {
+          value: "销售",
+          label: "销售"
+        },
+        {
+          value: "产品经理",
+          label: "产品经理"
+        },
+        {
+          value: "售后",
+          label: "售后"
+        }
+      ],
+      selected: "",
+      selectedIndex: "",
+      dialogType: 0 //0 新增 1 修改
     };
   },
   methods: {
@@ -128,25 +166,91 @@ export default {
     chooseUser(row, event, column) {
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(row);
+      this.selected = row;
     },
     //选择用户--点击checkbox
     chooseUser1(selection, row) {
       this.$refs.multipleTable.clearSelection();
       this.$refs.multipleTable.toggleRowSelection(row);
-    },
-    //新增用户
-    createUser() {
-      console.log("create");
-      var _this = this;
-      _this.dialogFormVisible = true;
+      this.selected = row;
     },
     //修改用户信息
     modifyUser() {
-      console.log("modify");
+      var _this = this;
+      if (_this.selected) {
+        _this.selectedIndex = _this.listPosition();
+        _this.dialogType = 1;
+        _this.dialogFormVisible = true;
+        _this.name = _this.selected.name;
+        _this.mobile = _this.selected.phone;
+        _this.department = _this.selected.dpt;
+        _this.position = _this.selected.post;
+        _this.imageUrl = _this.selected.url;
+      } else {
+        _this.$message.warning("请选择一个用户");
+      }
     },
     //删除用户
     delUser() {
-      console.log("delete");
+      var _this = this;
+      if (_this.selected) {
+        _this.selectedIndex = _this.listPosition();
+        _this.usersList.splice(_this.selectedIndex, 1);
+        _this.selected = "";
+      } else {
+        _this.$message.warning("请选择一个用户");
+      }
+    },
+    //根据手机查询用户对象的角标
+    listPosition() {
+      var _this = this;
+      var feedback = "";
+      _this.usersList.forEach((item, index) => {
+        if (item.name == _this.selected.name) {
+          feedback = index;
+        }
+      });
+      return feedback;
+    },
+    //新增用户
+    createUser() {
+      var _this = this;
+      _this.dialogType = 0;
+      _this.dialogFormVisible = true;
+    },
+    //新建用户--确认
+    createCfm() {
+      var _this = this;
+      if (_this.name && _this.mobile && _this.department && _this.position) {
+        _this.dialogFormVisible = false;
+        var obj = Object.assign({
+          name: _this.name,
+          phone: _this.mobile,
+          dpt: _this.department,
+          post: _this.position,
+          url:
+            "http://dev.bp.zcloudtechs.cn/resource//xxtz/20190723174445402.jpeg"
+        });
+        if (_this.dialogType == 0) {
+          _this.usersList.unshift(obj);
+        } else if (_this.dialogType == 1) {
+          _this.usersList.splice(_this.selectedIndex, 1, obj);
+          _this.$refs.multipleTable.clearSelection();
+        }
+        _this.paramInit();
+      } else {
+        _this.$message.error("信息填写不完整");
+      }
+    },
+    //参数初始化
+    paramInit() {
+      var _this = this;
+      _this.selected="";
+      _this.selectedIndex="";
+      _this.name = "";
+      _this.mobile = "";
+      _this.department = "";
+      _this.position = "";
     },
     //计算table高度
     computeHeight() {
@@ -159,18 +263,25 @@ export default {
       for (var i = 0; i < 20; i++) {
         var obj = Object.assign({
           name: "henry" + i,
-          phone: "13509852145",
+          phone: 13509852145 + i,
           dpt: "dev",
           post: "mechandiser",
           url:
             "http://dev.bp.zcloudtechs.cn/resource//xxtz/20190723174445402.jpeg"
         });
-        _this.tableData2.push(obj);
+        _this.usersList.push(obj);
       }
     },
+    //生成图片上传路径
+    computeUrl() {
+      var _this = this;
+      console.log(window.location.href);
+      _this.uploadUrl = _this.$util.basicUrl() + "/testing/usersImg";
+      console.log(_this.uploadUrl);
+    },
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(res,file)
+      //this.imageUrl = URL.createObjectURL(file.raw);
+      console.log(res, file);
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -188,6 +299,7 @@ export default {
   mounted() {
     var _this = this;
     _this.loadUsers();
+    _this.computeUrl();
   }
 };
 </script>
@@ -261,7 +373,7 @@ body > .el-container {
   height: 99px;
   display: flex;
   flex-flow: row;
-  justify-content: center;
+  justify-content: space-around;
   border-bottom: 1px solid white;
 }
 .dialogBlock .hblock:last-child {
@@ -269,35 +381,41 @@ body > .el-container {
 }
 .dialogBlock .hblock .semiL {
   height: 100%;
-  width: 50%;
-  background-color: orangered;
+  width: 45%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  /* background-color: orangered; */
 }
 .dialogBlock .hblock .semiR {
   height: 100%;
-  width: 50%;
-  background-color: yellowgreen;
+  width: 45%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  /* background-color: yellowgreen; */
 }
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    text-align: center;
-  }
-  .avatar {
-    width: 100px;
-    height: 100px;
-    display: block;
-  }
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+}
+.avatar {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
 </style>
