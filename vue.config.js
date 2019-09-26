@@ -1,8 +1,8 @@
 //const theme = require('./src/theme/theme')
 //import proxyInfo from './src/util/settingInfo.js'
 const devPath = {
-  name: '/zyschool',
-  path: '/pc/'
+  name: '/zycourse',
+  path: ''
   // name: '/platform-admin',
   // path: '/phone/'
 }

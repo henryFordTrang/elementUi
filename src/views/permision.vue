@@ -11,7 +11,7 @@
                 class="el-menu-vertical-demo"
                 @open="handleOpen"
                 @close="handleClose"
-                @select="navi"
+                @select="navi1"
                 background-color="#d3dce6"
                 text-color="#000000"
                 active-text-color="#ffd04b"
@@ -36,7 +36,43 @@
 export default {
   data() {
     return {
-      data: [],
+      data: [
+        {
+          key:1,
+          label:'lo',
+          disabled:false
+        },
+        {
+          key:2,
+          label:'henry',
+          disabled:false
+        },
+        {
+          key:3,
+          label:'trang',
+          disabled:false
+        },
+        {
+          key:4,
+          label:'Quyen',
+          disabled:false
+        },
+        {
+          key:5,
+          label:'Vivian',
+          disabled:false
+        },
+        {
+          key:6,
+          label:'Thao',
+          disabled:false
+        },
+        {
+          key:7,
+          label:'Nhung',
+          disabled:false
+        }
+      ],
       position: [
         { posName: "前端", posCode: 1 },
         { posName: "后端", posCode: 2 },
@@ -47,7 +83,8 @@ export default {
         { posName: "安卓", posCode: 7 },
         { posName: "产品经理", posCode: 8 }
       ],
-      value1: [1, 3]
+      value1: [1, 3],
+      optionCode:'',
     };
   },
   methods: {
@@ -57,8 +94,9 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    navi(index, indexPath) {
+    navi1(index, indexPath) {
       var _this = this;
+      console.log(parseInt(index.replace(/[^0-9]/gi, "")),indexPath)
       _this.data = [];
       _this.value1 = [];
       var recyNum = 5 + parseInt(index.replace(/[^0-9]/gi, ""));
@@ -79,7 +117,7 @@ export default {
           label: "选项" + i,
           disabled: false
         });
-        _this.data.push(obj);
+        //_this.data.push(obj);
       }
     }
   },

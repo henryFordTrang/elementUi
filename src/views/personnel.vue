@@ -5,7 +5,7 @@
       <el-main>
         <div class="wrapper">
           <div class="operation">
-            <el-button type="success" @click="createUser">新增</el-button>
+            <el-button type="success" @click="dialogVisible = true">新增</el-button>
             <el-button type="info" @click="modifyUser">修改</el-button>
             <el-button type="warning" @click="delUser">删除</el-button>
           </div>
@@ -20,24 +20,23 @@
               @row-click="chooseUser"
             >
               <el-table-column type="selection" width="55"></el-table-column>
-              <el-table-column prop="url" label="相片" width="120" show-overflow-tooltip>
+              <el-table-column prop="icon" label="相片" width="120" show-overflow-tooltip>
                 <template slot-scope="scope">
-                  <img :src="scope.row.url" alt class="image" />
+                  <img :src="scope.row.icon" alt class="image" />
                 </template>
               </el-table-column>
               <el-table-column prop="name" label="姓名" width="120"></el-table-column>
               <el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="dpt" label="部门" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="role" label="部门" show-overflow-tooltip></el-table-column>
               <el-table-column prop="post" label="职务" show-overflow-tooltip></el-table-column>
             </el-table>
           </div>
         </div>
       </el-main>
     </el-container>
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <div class="dialogBlock">
-        <div class="hblock">
-          <div class="semiL">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="头像:">
           <el-upload
             class="avatar-uploader"
             :action="uploadUrl"
@@ -48,52 +47,34 @@
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-          </div>
-          <div class="semiR">
-            <el-input placeholder="请输入密码" v-model="name">
-              <template slot="prepend">姓名:</template>
-            </el-input>
-          </div>
-        </div>
-        <div class="hblock">
-          <div class="semiL">
-            <el-input placeholder="请输入姓名" v-model="name">
-              <template slot="prepend">姓名:</template>
-            </el-input>
-          </div>
-          <div class="semiR">
-            <el-input placeholder="请输入手机" v-model="mobile">
-              <template slot="prepend">手机号:</template>
-            </el-input>
-          </div>
-        </div>
-        <div class="hblock">
-          <div class="semiL">
-            <el-select v-model="department" clearable placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </div>
-          <div class="semiR">
-            <el-select v-model="position" clearable placeholder="请选择">
-              <el-option
-                v-for="item in postOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </div>
-        </div>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="createCfm">确 定</el-button>
-      </div>
+        </el-form-item>
+        <el-form-item label="姓名:">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="部门:">
+          <el-select v-model="form.post" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="手机:">
+          <el-input v-model="form.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="密码:">
+          <el-input v-model="form.password"></el-input>
+        </el-form-item>
+        <el-form-item label="职务:">
+          <el-input v-model="form.role"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmit()">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -110,6 +91,7 @@ export default {
       imageUrl: "",
       name: "",
       mobile: "",
+      password:"",
       department: "",
       position: "",
       options: [
@@ -158,7 +140,40 @@ export default {
       ],
       selected: "",
       selectedIndex: "",
-      dialogType: 0 //0 新增 1 修改
+      dialogType: 0, //0 新增 1 修改
+      dialogVisible: false,
+      form: {
+        icon: "",
+        name: "",
+        post: "",
+        phone: "",
+        password: "",
+        role: ""
+      },
+      imageUrl: "",
+      uploadUrl: "",
+      options: [
+        {
+          value: 1,
+          label: "黄金糕"
+        },
+        {
+          value: 2,
+          label: "双皮奶"
+        },
+        {
+          value: 3,
+          label: "蚵仔煎"
+        },
+        {
+          value: 4,
+          label: "龙须面"
+        },
+        {
+          value: 5,
+          label: "北京烤鸭"
+        }
+      ],
     };
   },
   methods: {
@@ -212,36 +227,45 @@ export default {
       });
       return feedback;
     },
-    //新增用户
-    createUser() {
+    //生成图片上传路径
+    computeUrl() {
       var _this = this;
-      _this.dialogType = 0;
-      _this.dialogFormVisible = true;
+      _this.uploadUrl = _this.$util.basicUrl() + "/api/ts/fileUpload1";
     },
-    //新建用户--确认
-    createCfm() {
-      var _this = this;
-      if (_this.name && _this.mobile && _this.department && _this.position) {
-        _this.dialogFormVisible = false;
-        var obj = Object.assign({
-          name: _this.name,
-          phone: _this.mobile,
-          dpt: _this.department,
-          post: _this.position,
-          url:
-            "http://dev.bp.zcloudtechs.cn/resource//xxtz/20190723174445402.jpeg"
-        });
-        if (_this.dialogType == 0) {
-          _this.usersList.unshift(obj);
-        } else if (_this.dialogType == 1) {
-          _this.usersList.splice(_this.selectedIndex, 1, obj);
-          _this.$refs.multipleTable.clearSelection();
-        }
-        _this.paramInit();
-      } else {
-        _this.$message.error("信息填写不完整");
+    handleAvatarSuccess(res, file) {
+      console.log(res,file)
+      var _this=this;
+      _this.imageUrl = URL.createObjectURL(file.raw);
+      _this.form.icon = res;
+      
+    },
+
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("Avatar picture must be JPG format!");
       }
+      if (!isLt2M) {
+        this.$message.error("Avatar picture size can not exceed 2MB!");
+      }
+      return isJPG && isLt2M;
     },
+
+    onSubmit() {
+      var _this=this;
+      this.dialogVisible = false;
+      var url=_this.$util.basicUrl() + "/api/ts/newUsers";
+      _this.$axios.post(url,_this.form).then((rsp)=>{
+        _this.usersList=rsp.data;
+      })
+
+    },
+    handleClose(done) {
+      done();
+    },
+    
     //参数初始化
     paramInit() {
       var _this = this;
@@ -260,41 +284,13 @@ export default {
     //加载用户信息
     loadUsers() {
       var _this = this;
-      for (var i = 0; i < 20; i++) {
-        var obj = Object.assign({
-          name: "henry" + i,
-          phone: 13509852145 + i,
-          dpt: "dev",
-          post: "mechandiser",
-          url:
-            "http://dev.bp.zcloudtechs.cn/resource//xxtz/20190723174445402.jpeg"
-        });
-        _this.usersList.push(obj);
-      }
+      var url=_this.$util.basicUrl()+'/api/ts/queryUsers';
+      _this.$axios.post(url).then((rsp)=>{
+        _this.usersList=rsp.data;
+        console.log(_this.usersList,'======================')
+      })
     },
-    //生成图片上传路径
-    computeUrl() {
-      var _this = this;
-      console.log(window.location.href);
-      _this.uploadUrl = _this.$util.basicUrl() + "/testing/usersImg";
-      console.log(_this.uploadUrl);
-    },
-    handleAvatarSuccess(res, file) {
-      //this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(res, file);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    }
+    
   },
   mounted() {
     var _this = this;
