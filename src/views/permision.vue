@@ -19,14 +19,14 @@
                 <el-menu-item
                   v-for="(item,index1) in position"
                   :key="index1"
-                  :index="'navi'+index1"
+                  :index="'navi'+item.posCode"
                 >{{item.posName}}</el-menu-item>
               </el-menu>
             </el-col>
           </el-row>
         </el-aside>
         <el-main>
-          <el-transfer v-model="value1" :data="data" :titles="['禁止', '开放']"></el-transfer>
+          <el-transfer v-model="value1" :data="data" @change="permitSet" :titles="['禁止', '开放']"></el-transfer>
         </el-main>
       </el-container>
     </el-container>
@@ -38,41 +38,42 @@ export default {
     return {
       data: [
         {
-          key:1,
-          label:'lo',
-          disabled:false
+          key: 1,
+          label: "lo",
+          disabled: false
         },
         {
-          key:2,
-          label:'henry',
-          disabled:false
+          key: 2,
+          label: "henry",
+          disabled: false
         },
         {
-          key:3,
-          label:'trang',
-          disabled:false
+          key: 3,
+          label: "trang",
+          disabled: false
         },
         {
-          key:4,
-          label:'Quyen',
-          disabled:false
+          key: 4,
+          label: "Quyen",
+          disabled: false
         },
         {
-          key:5,
-          label:'Vivian',
-          disabled:false
+          key: 5,
+          label: "Vivian",
+          disabled: false
         },
         {
-          key:6,
-          label:'Thao',
-          disabled:false
+          key: 6,
+          label: "Thao",
+          disabled: false
         },
         {
-          key:7,
-          label:'Nhung',
-          disabled:false
+          key: 7,
+          label: "Nhung",
+          disabled: false
         }
       ],
+      value1: [],
       position: [
         { posName: "前端", posCode: 1 },
         { posName: "后端", posCode: 2 },
@@ -83,8 +84,7 @@ export default {
         { posName: "安卓", posCode: 7 },
         { posName: "产品经理", posCode: 8 }
       ],
-      value1: [1, 3],
-      optionCode:'',
+      curRole: ""
     };
   },
   methods: {
@@ -96,30 +96,73 @@ export default {
     },
     navi1(index, indexPath) {
       var _this = this;
-      console.log(parseInt(index.replace(/[^0-9]/gi, "")),indexPath)
-      _this.data = [];
-      _this.value1 = [];
-      var recyNum = 5 + parseInt(index.replace(/[^0-9]/gi, ""));
-      for (var i = 0; i < recyNum; i++) {
-        var obj = Object.assign({
-          key: i,
-          label: "选项" + i,
-          disabled: false
-        });
-        _this.data.push(obj);
-      }
+      _this.curRole = index.replace("navi", "");
+      _this.qryAuthByRole();
     },
     positionInit() {
       var _this = this;
-      for (var i = 0; i < 5; i++) {
-        var obj = Object.assign({
-          key: i,
-          label: "选项" + i,
-          disabled: false
+      var url = _this.$util.basicUrl() + "/api/ts/qryAllRole";
+      _this.$axios.post(url).then(rsp => {
+        _this.position = [];
+        _this.curRole = rsp.data[0].code;
+        _this.qryAuthByRole();
+        rsp.data.forEach((item, index) => {
+          var unit = Object.assign({
+            posName: item.name,
+            posCode: item.code
+          });
+          _this.position.push(unit);
+        });           
+      });
+      var url = _this.$util.basicUrl() + "/api/ts/qryAllAuth";
+      _this.$axios.post(url).then(rsp => {
+        _this.data = [];
+        rsp.data.forEach((item, index) => {
+          var unit = Object.assign({
+            key: item.code,
+            label: item.name,
+            disabled: false
+          });
+          _this.data.push(unit);
         });
-        //_this.data.push(obj);
+      });
+    },
+    qryAuthByRole() {
+      var _this = this;
+      var url = _this.$util.basicUrl() + "/api/ts/queryRoleAuth";
+      var mes = Object.assign({
+        role: _this.curRole
+      });
+      _this.$axios.post(url, mes).then(rsp => {
+        _this.value1 = [];
+        rsp.data.forEach((item, index) => {
+          _this.value1.push(item.authoriCode);
+        });
+      });
+    },
+    permitSet(live, direction, key) {
+      var _this = this;
+      console.log(live,direction,key[0]);
+      var addUrl=_this.$util.basicUrl() + "/api/ts/addAuth";
+      var delUrl=_this.$util.basicUrl() + "/api/ts/deleteAuth";
+      var mes=mes=Object.assign({
+          role:_this.curRole,
+          auth:key[0]
+        })
+        //mes=JSON.stringify(mes)
+      switch(direction){
+        case 'left':_this.permitAjax(delUrl,mes);
+        break;
+        case 'right':_this.permitAjax(addUrl,mes);
+        break;
       }
-    }
+    },
+    permitAjax(url,mes){
+      var _this=this;
+      _this.$axios.post(url,mes).then((rsp)=>{
+
+      })
+    },
   },
   mounted() {
     var _this = this;

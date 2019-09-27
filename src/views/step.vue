@@ -3,7 +3,7 @@
     <el-table id="table" :data="tableData" border :cell-style="bg" style="width: 100%">
       <el-table-column fixed prop="date.value" label="日期" width="150"></el-table-column>
       <el-table-column prop="name.value" label="姓名" width="120"></el-table-column>
-      <el-table-column prop="province.value" label="省份" width="120"></el-table-column>
+      <el-table-column prop="province.value" v-if="auth.indexOf('eee')>-1" label="省份" width="120"></el-table-column>
       <el-table-column prop="city.value" label="市区" width="120"></el-table-column>
       <el-table-column prop="address.value" label="地址" width="300"></el-table-column>
       <el-table-column prop="zip.value" label="邮编" width="120"></el-table-column>
@@ -11,10 +11,10 @@
         <template slot-scope="scope">
           <el-button @click="scope.row.zip.status=!scope.row.zip.status" type="text" size="small">查看</el-button>
           <el-button type="text" size="small">编辑</el-button>
+          {{auth.indexOf('dd')}}
         </template>
       </el-table-column>
     </el-table>
-    
   </div>
 </template>
 <script>
@@ -58,7 +58,7 @@ export default {
           zip: { value: "200333", status: true }
         }
       ],
-      
+      auth:[],
     };
   },
 
@@ -75,27 +75,22 @@ export default {
       var _this = this;
       _this.uploadUrl = _this.$util.basicUrl() + "/api/ts/fileUpload1";
     },
-    handleAvatarSuccess(res, file) {
-      console.log(res,file)
+    queryRoleAuth() {
       var _this=this;
-      _this.imageUrl = URL.createObjectURL(file.raw);
-      _this.form.icon = res;
-      
-    },
-
-   
-
-    onSubmit() {
-      var _this=this;
-      this.dialogVisible = false;
-      var url=_this.$util.basicUrl() + "/api/ts/newUsers";
-      _this.$axios.post(url,_this.form).then((rsp)=>{
-        
+      var url=_this.$util.basicUrl() + "/api/ts/queryRoleAuth";
+      var mes=Object.assign({
+        role:'mng'
       })
-
-    },
-    handleClose(done) {
-      done();
+      _this.$axios.post(url,mes).then((rsp)=>{
+        rsp.data.forEach((item,index)=>{
+          console.log(index,item.authoriCode,'===========')
+          _this.auth.push(item.authoriCode)
+        })
+        console.log(_this.auth)
+        if(_this.auth.indexOf('ddd')){
+          console.log(888)
+        }
+      })
     },
     bg(a) {
       var _this = this;
@@ -162,10 +157,10 @@ export default {
       //     if (typeof console !== "undefined") console.log(e, wbout);
       //   }
       //   return wbout;
-    }
+    },
   },
   mounted() {
-    
+    this.queryRoleAuth();
   }
 };
 </script>
