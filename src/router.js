@@ -5,6 +5,7 @@ import mainPage from './views/mainPage';
 import step from './views/step';
 import personnel from './views/personnel';
 import permision from './views/permision';
+import login from './views/login';
 import test from './views/test';
 Vue.use(Router);
 
@@ -42,9 +43,14 @@ export default new Router({
             component:test
         },
         {
+            path:'/login',
+            name:'login',
+            component:login
+        },
+        {
             path:'*',
             name:'error',
-            component:personnel
+            component:test
         }
     ]
 })

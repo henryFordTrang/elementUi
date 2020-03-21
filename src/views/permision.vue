@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header></el-header>
+      <el-header>
+      </el-header>
       <el-container>
         <el-aside width="200px">
           <el-row class="tac">
@@ -27,12 +28,15 @@
         </el-aside>
         <el-main>
           <el-transfer v-model="value1" :data="data" @change="permitSet" :titles="['禁止', '开放']"></el-transfer>
+          <input type="button" @click="ddd" value="phillipine" class="routeSecure">
         </el-main>
       </el-container>
     </el-container>
   </div>
 </template>      
 <script>
+import md5 from 'js-md5';
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -87,6 +91,7 @@ export default {
       curRole: ""
     };
   },
+  computed: mapGetters(["encryptItm","encryptVal"]),
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -112,7 +117,7 @@ export default {
             posCode: item.code
           });
           _this.position.push(unit);
-        });           
+        });
       });
       var url = _this.$util.basicUrl() + "/api/ts/qryAllAuth";
       _this.$axios.post(url).then(rsp => {
@@ -142,31 +147,57 @@ export default {
     },
     permitSet(live, direction, key) {
       var _this = this;
-      console.log(live,direction,key[0]);
-      var addUrl=_this.$util.basicUrl() + "/api/ts/addAuth";
-      var delUrl=_this.$util.basicUrl() + "/api/ts/deleteAuth";
-      var mes=mes=Object.assign({
+      var addUrl = _this.$util.basicUrl() + "/api/ts/addAuth";
+      var delUrl = _this.$util.basicUrl() + "/api/ts/deleteAuth";
+      //_this.value1和 live 两个集合去除重复元素
+      var mes=[];
+      key.forEach((item,index)=>{
+        var unit=Object.assign({
           role:_this.curRole,
-          auth:key[0]
+          auth:item
         })
-        //mes=JSON.stringify(mes)
-      switch(direction){
-        case 'left':_this.permitAjax(delUrl,mes);
-        break;
-        case 'right':_this.permitAjax(addUrl,mes);
-        break;
+        mes.push(unit)
+      })     
+      switch (direction) {
+        case "left":
+          _this.permitAjax(delUrl, mes);
+          break;
+        case "right":
+          _this.permitAjax(addUrl, mes);
+          break;
       }
     },
-    permitAjax(url,mes){
-      var _this=this;
-      _this.$axios.post(url,mes).then((rsp)=>{
-
-      })
+    //两个数组去重
+    arr_quchong(arr1, arr2) {
+      var temp = []; //临时数组1
+      var temparray = []; //临时数组2
+      for (var i = 0; i < arr2.length; i++) {
+        temp[arr2[i]] = true; //巧妙地方：把数组B的值当成临时数组1的键并赋值为真
+      }
+      for (var i = 0; i < arr1.length; i++) {
+        if (!temp[arr1[i]]) {
+          temparray.push(arr1[i]);
+        }
+      }
+      return temparray.join(",") + "";
+    },
+    permitAjax(url, mes) {
+      var _this = this;
+      _this.$axios.post(url, mes).then(rsp => {});
+    },
+    ddd(){
+      this.$router.replace('/personnel')
     },
   },
   mounted() {
     var _this = this;
     _this.positionInit();
+    var raw=$.now()+'池钟地';
+    sessionStorage.setItem('sessionId',md5(raw));
+    console.log(_this.encryptVal,'-------------')
+    if(_this.encryptVal!='yes'){
+      _this.$router.replace('/login')
+    }
   }
 };
 </script>
@@ -206,5 +237,13 @@ body > .el-container {
 
 .el-main /deep/ .el-transfer-panel__item .el-checkbox__input {
   left: 20px;
+}
+.routeSecure{
+  outline:none;
+  background-color:white;
+  border:1px solid #eee;
+  width:100px;
+  height:70px;
+  line-height:70px;
 }
 </style>

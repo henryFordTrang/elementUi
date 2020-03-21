@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header></el-header>
+      <el-header>
+        {{encryptItm}}{{encryptVal}}{{vuexTest}}
+      </el-header>
       <el-main>
         <div class="wrapper">
           <div class="operation">
@@ -31,7 +33,9 @@
               <el-table-column prop="post" label="职务" show-overflow-tooltip></el-table-column>
             </el-table>
           </div>
+          <el-button @click="gotoPage">取 消</el-button>
         </div>
+        
       </el-main>
     </el-container>
     <el-dialog title="提示" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
@@ -79,6 +83,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -174,8 +179,10 @@ export default {
           label: "北京烤鸭"
         }
       ],
+      vuexTest:'',
     };
   },
+  computed: mapGetters(["encryptItm","encryptVal"]),
   methods: {
     //选择用户--点击table row
     chooseUser(row, event, column) {
@@ -252,6 +259,10 @@ export default {
       }
       return isJPG && isLt2M;
     },
+    gotoPage(){
+      var _this=this;
+      _this.$router.replace('/permision')
+    },
 
     onSubmit() {
       var _this=this;
@@ -260,7 +271,6 @@ export default {
       _this.$axios.post(url,_this.form).then((rsp)=>{
         _this.usersList=rsp.data;
       })
-
     },
     handleClose(done) {
       done();
@@ -279,7 +289,7 @@ export default {
     //计算table高度
     computeHeight() {
       var block = $(".table");
-      return block[0] ? block[0].clientHeight : 700;
+      return block[0] ? block[0].clientHeight : 660;
     },
     //加载用户信息
     loadUsers() {
@@ -296,6 +306,9 @@ export default {
     var _this = this;
     _this.loadUsers();
     _this.computeUrl();
+    var item1=_this.encryptItem
+    _this.vuexTest=_this.item1;
+
   }
 };
 </script>
@@ -330,6 +343,7 @@ body > .el-container {
   height: 100%;
   display: flex;
   flex-flow: column;
+  overflow:hidden;
 }
 .wrapper .operation {
   width: 100%;

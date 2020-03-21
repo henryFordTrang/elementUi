@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import store from './store';
 import axios from 'axios';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -36,6 +37,17 @@ Vue.prototype.$util={
     //return window.location.pathname.split("/phone")[0];
   }
 }
+//路由钩子--判断是否登录过了
+//router.beforeEach((to, from, next)=>{
+  //console.log(store.state.encryptVal)
+  // if(from.path!='/'&&store.state.encryptVal=='yes'||to.path=='/login'){
+    
+  //   next();
+  // }else{
+  //   next({path: '/test'})
+  // }
+  
+//})
 new Vue({
   methods:{
 
@@ -43,6 +55,7 @@ new Vue({
   created(){
     
   },
+  store,
   router,
   render: h => h(App),
 }).$mount('#app')

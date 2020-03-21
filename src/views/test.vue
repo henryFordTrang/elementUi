@@ -1,8 +1,16 @@
 <template>
   <div id="app" ref="app">
     <template style="width:100px;height:200px;background-color:red;display:block" v-slot:footer>
-      <div>dddddd5555555ddd</div>
+      
     </template>
+    <van-field
+    v-model="message"
+    rows="1"
+    autosize
+    label="留言"
+    type="textarea"
+    placeholder="请输入留言"
+  />
     <el-upload
       class="avatar-uploader"
       :action="uploadUrl"
@@ -18,7 +26,7 @@
         <div class="block"></div>
         <div class="block"></div>
         <div class="block1"></div>
-        <nancy v-bind="$attrs" :name="name" @nancyClick="nancyClick1">1111</nancy>
+        <nancy v-bind="$attrs" :name="name" :nancyPara="enterClass" @nancyClick="nancyClick1">1111</nancy>
       </div>
     </div>
     <div class="btnWra">
@@ -40,6 +48,7 @@ export default {
       show: true,
       enterClass: "enter",
       uploadUrl:'',
+      message:'',
     };
   },
   methods: {
@@ -79,6 +88,7 @@ export default {
     },
     nancyClick1(i) {
       alert(i)
+      
       window.location.hash="www.baidu.com"
     },
     add() {
