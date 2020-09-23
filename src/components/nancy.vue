@@ -7,17 +7,17 @@
 </template>
 <script>
 export default {
-    props:{
-        nancyPara:{
-            type:String,
-            default:'i am nancy'
-        }
-    },
-    methods:{
-        testing(){
-            this.$emit('nancyClick','information from nancy')
-        }
+  props: {
+    nancyPara: {
+      type: String,
+      default: 'i am nancy'
     }
+  },
+  methods: {
+    testing () {
+      this.$emit('nancyClick', 'information from nancy')
+    }
+  }
 }
 </script>
 <style scoped>

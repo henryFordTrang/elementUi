@@ -1,7 +1,6 @@
 <template>
   <div id="app" ref="app">
-    <template style="width:100px;height:200px;background-color:red;display:block" v-slot:footer>
-      
+    <template style="width:100px;height:200px;background-color:red;display:block">
     </template>
     <van-field
     v-model="message"
@@ -35,82 +34,82 @@
     <transition name="fade" enter-active-class="enter" @enter="entering" @leave="leaving">
       <div ref="remove1" id="remove1" v-if="show">sdfdsjlkfjdslkfjds</div>
     </transition>
-    
+
   </div>
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
-      name: "my name is nancy",
-      xxx: "",
-      imageUrl: "",
+      name: 'my name is nancy',
+      xxx: '',
+      imageUrl: '',
       show: true,
-      enterClass: "enter",
-      uploadUrl:'',
-      message:'',
-    };
-  },
-  methods: {
-    //生成图片上传路径
-    computeUrl() {
-      var _this = this;
-      console.log(window.location.href);
-      _this.uploadUrl = _this.$util.basicUrl() + "/api/ts/fileUpload1";
-      
-      console.log(_this.uploadUrl);
-    },
-   handleAvatarSuccess(res, file) {
-     console.log(res,file)
-        this.imageUrl = URL.createObjectURL(file.raw)
-         console.log("2",file.raw)
-          console.log("3",URL.createObjectURL(file.raw))
-           console.log("22",this.imageUrl)
-      },
-      
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('Avatar picture must be JPG format!');
-        }
-        if (!isLt2M) {
-          this.$message.error('Avatar picture size can not exceed 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
-    entering() {
-      console.log("entering.......");
-    },
-    leaving() {
-      console.log("leaving.......");
-    },
-    nancyClick1(i) {
-      alert(i)
-      
-      window.location.hash="www.baidu.com"
-    },
-    add() {
-      var _this = this;
-      var div = document.createElement("div");
-      div.id = "remove1";
-      div.innerHTML = "sdfdsjlkfjdslkfjds";
-      div.$refs = "33333";
-      console.log($("#remove1"));
-      _this.$refs.app.appendChild(div);
-    },
-    remove() {
-      var _this = this;
-      _this.$refs.remove1.remove();
-      console.log(_this.$refs.remove1, $("#remove1"));
+      enterClass: 'enter',
+      uploadUrl: '',
+      message: ''
     }
   },
-  created() {},
-  mounted() {
+  methods: {
+    // 生成图片上传路径
+    computeUrl () {
+      var _this = this
+      // console.log(window.location.href);
+      _this.uploadUrl = _this.$util.basicUrl() + '/api/ts/fileUpload1'
+
+      // console.log(_this.uploadUrl);
+    },
+    handleAvatarSuccess (res, file) {
+      // console.log(res,file)
+      this.imageUrl = URL.createObjectURL(file.raw)
+      //  console.log("2",file.raw)
+      //   console.log("3",URL.createObjectURL(file.raw))
+      //    console.log("22",this.imageUrl)
+    },
+
+    beforeAvatarUpload (file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('Avatar picture must be JPG format!')
+      }
+      if (!isLt2M) {
+        this.$message.error('Avatar picture size can not exceed 2MB!')
+      }
+      return isJPG && isLt2M
+    },
+    entering () {
+      // console.log("entering.......");
+    },
+    leaving () {
+      // console.log("leaving.......");
+    },
+    nancyClick1 (i) {
+      alert(i)
+
+      window.location.hash = 'www.baidu.com'
+    },
+    add () {
+      var _this = this
+      var div = document.createElement('div')
+      div.id = 'remove1'
+      div.innerHTML = 'sdfdsjlkfjdslkfjds'
+      div.$refs = '33333'
+      // console.log($("#remove1"));
+      _this.$refs.app.appendChild(div)
+    },
+    remove () {
+      var _this = this
+      _this.$refs.remove1.remove()
+      // console.log(_this.$refs.remove1, $("#remove1"));
+    }
+  },
+  created () {},
+  mounted () {
     this.computeUrl()
   }
-};
+}
 </script>
 <style scoped>
 #test {

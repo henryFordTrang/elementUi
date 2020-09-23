@@ -235,38 +235,38 @@
 </style>
 <script>
 export default {
-  data() {
+  data () {
     return {
       processList: [1, 2]
-    };
-  },
-  methods: {
-    addTerm() {
-      var _this = this;
-      _this.processList.push(1);
-      _this.$nextTick(() => {
-        _this.calcConnectorWidth();
-      });
-    },
-    removeTerm(){
-        var _this = this;
-        _this.processList.splice(0,1);
-        _this.$nextTick(() => {
-        _this.calcConnectorWidth();
-      });
-    },
-    calcConnectorWidth() {
-      var _this = this;
-      var w = _this.$refs.process0[0].offsetLeft;
-      var t =
-        _this.$refs["process" + (_this.processList.length - 1)][0].offsetLeft;
-      _this.$refs.horiconnector.style.width = Math.abs(w - t) + "px";
-      _this.$refs.horiconnectorB.style.width = Math.abs(w - t) + "px";
     }
   },
-  mounted() {
-    var _this = this;
-    _this.calcConnectorWidth();
+  methods: {
+    addTerm () {
+      var _this = this
+      _this.processList.push(1)
+      _this.$nextTick(() => {
+        _this.calcConnectorWidth()
+      })
+    },
+    removeTerm () {
+      var _this = this
+      _this.processList.splice(0, 1)
+      _this.$nextTick(() => {
+        _this.calcConnectorWidth()
+      })
+    },
+    calcConnectorWidth () {
+      var _this = this
+      var w = _this.$refs.process0[0].offsetLeft
+      var t =
+        _this.$refs['process' + (_this.processList.length - 1)][0].offsetLeft
+      _this.$refs.horiconnector.style.width = Math.abs(w - t) + 'px'
+      _this.$refs.horiconnectorB.style.width = Math.abs(w - t) + 'px'
+    }
+  },
+  mounted () {
+    var _this = this
+    _this.calcConnectorWidth()
   }
-};
+}
 </script>

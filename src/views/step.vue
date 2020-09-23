@@ -21,122 +21,121 @@
 // import FileSaver from "file-saver";
 // import XLSX from "xlsx";
 export default {
-  name: "eee",
-  data() {
+  name: 'eee',
+  data () {
     return {
       tableData: [
         {
-          date: { value: "2016-05-03", status: true },
-          name: { value: "王小虎", status: false },
-          province: { value: "上海", status: true },
-          city: { value: "普陀区", status: false },
-          address: { value: "上海市普陀区金沙江路 1518 弄", status: false },
-          zip: { value: "200333", status: false }
+          date: { value: '2016-05-03', status: true },
+          name: { value: '王小虎', status: false },
+          province: { value: '上海', status: true },
+          city: { value: '普陀区', status: false },
+          address: { value: '上海市普陀区金沙江路 1518 弄', status: false },
+          zip: { value: '200333', status: false }
         },
         {
-          date: { value: "2016-05-03", status: false },
-          name: { value: "王小虎", status: false },
-          province: { value: "上海", status: true },
-          city: { value: "普陀区", status: false },
-          address: { value: "上海市普陀区金沙江路 1518 弄", status: false },
-          zip: { value: "200333", status: false }
+          date: { value: '2016-05-03', status: false },
+          name: { value: '王小虎', status: false },
+          province: { value: '上海', status: true },
+          city: { value: '普陀区', status: false },
+          address: { value: '上海市普陀区金沙江路 1518 弄', status: false },
+          zip: { value: '200333', status: false }
         },
         {
-          date: { value: "2016-05-03", status: true },
-          name: { value: "王小虎", status: true },
-          province: { value: "上海", status: false },
-          city: { value: "普陀区", status: false },
-          address: { value: "上海市普陀区金沙江路 1518 弄", status: true },
-          zip: { value: "200333", status: false }
+          date: { value: '2016-05-03', status: true },
+          name: { value: '王小虎', status: true },
+          province: { value: '上海', status: false },
+          city: { value: '普陀区', status: false },
+          address: { value: '上海市普陀区金沙江路 1518 弄', status: true },
+          zip: { value: '200333', status: false }
         },
         {
-          date: { value: "2016-05-03", status: true },
-          name: { value: "王小虎", status: true },
-          province: { value: "上海", status: false },
-          city: { value: "普陀区", status: false },
-          address: { value: "上海市普陀区金沙江路 1518 弄", status: false },
-          zip: { value: "200333", status: true }
+          date: { value: '2016-05-03', status: true },
+          name: { value: '王小虎', status: true },
+          province: { value: '上海', status: false },
+          city: { value: '普陀区', status: false },
+          address: { value: '上海市普陀区金沙江路 1518 弄', status: false },
+          zip: { value: '200333', status: true }
         }
       ],
-      auth:[],
-    };
+      auth: []
+    }
   },
 
   methods: {
-    handleClick(row) {
-      console.log(row);
+    handleClick (row) {
+      console.log(row)
     },
-    getUploadUrl() {
-      var _this = this;
-      return "";
+    getUploadUrl () {
+      return ''
     },
-    //生成图片上传路径
-    computeUrl() {
-      var _this = this;
-      _this.uploadUrl = _this.$util.basicUrl() + "/api/ts/fileUpload1";
+    // 生成图片上传路径
+    computeUrl () {
+      var _this = this
+      _this.uploadUrl = _this.$util.basicUrl() + '/api/ts/fileUpload1'
     },
-    queryRoleAuth() {
-      var _this=this;
-      var url=_this.$util.basicUrl() + "/api/ts/queryRoleAuth";
-      var mes=Object.assign({
-        role:'mng'
+    queryRoleAuth () {
+      var _this = this
+      var url = _this.$util.basicUrl() + '/api/ts/queryRoleAuth'
+      var mes = Object.assign({
+        role: 'mng'
       })
-      _this.$axios.post(url,mes).then((rsp)=>{
-        rsp.data.forEach((item,index)=>{
-          console.log(index,item.authoriCode,'===========')
+      _this.$axios.post(url, mes).then((rsp) => {
+        rsp.data.forEach((item, index) => {
+          console.log(index, item.authoriCode, '===========')
           _this.auth.push(item.authoriCode)
         })
         console.log(_this.auth)
-        if(_this.auth.indexOf('ddd')){
+        if (_this.auth.indexOf('ddd')) {
           console.log(888)
         }
       })
     },
-    bg(a) {
-      var _this = this;
-      var index = a.columnIndex;
-      var count = 0;
-      var name1 = "";
+    bg (a) {
+      var _this = this
+      var index = a.columnIndex
+      var count = 0
+      var name1 = ''
       for (var key in _this.tableData[a.rowIndex]) {
-        if (count == index) {
-          name1 = key;
+        if (count === index) {
+          name1 = key
         }
-        count++;
+        count++
       }
       switch (name1) {
-        case "name":
+        case 'name':
           if (_this.tableData[a.rowIndex].name.status) {
-            return "background-color:yellowgreen";
+            return 'background-color:yellowgreen'
           }
-          break;
-        case "city":
+          break
+        case 'city':
           if (_this.tableData[a.rowIndex].city.status) {
-            return "background-color:yellowgreen";
+            return 'background-color:yellowgreen'
           }
-          break;
-        case "date":
+          break
+        case 'date':
           if (_this.tableData[a.rowIndex].date.status) {
-            return "background-color:yellowgreen";
+            return 'background-color:yellowgreen'
           }
-          break;
-        case "province":
+          break
+        case 'province':
           if (_this.tableData[a.rowIndex].province.status) {
-            return "background-color:yellowgreen";
+            return 'background-color:yellowgreen'
           }
-          break;
-        case "address":
+          break
+        case 'address':
           if (_this.tableData[a.rowIndex].address.status) {
-            return "background-color:yellowgreen";
+            return 'background-color:yellowgreen'
           }
-          break;
-        case "zip":
+          break
+        case 'zip':
           if (_this.tableData[a.rowIndex].zip.status) {
-            return "background-color:yellowgreen";
+            return 'background-color:yellowgreen'
           }
-          break;
+          break
       }
     },
-    exportExcel() {
+    exportExcel () {
       //   var wb = XLSX.utils.table_to_book(document.querySelector("#table"));
       //   var wbout = XLSX.write(wb, {
       //     bookType: "xlsx",
@@ -157,12 +156,12 @@ export default {
       //     if (typeof console !== "undefined") console.log(e, wbout);
       //   }
       //   return wbout;
-    },
+    }
   },
-  mounted() {
-    this.queryRoleAuth();
+  mounted () {
+    this.queryRoleAuth()
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .avatar-uploader .el-upload {
@@ -199,4 +198,3 @@ export default {
   text-align: left;
 }
 </style>
-

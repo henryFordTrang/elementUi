@@ -116,84 +116,84 @@
   </div>
 </template>
 <script>
-import {} from "iview";
+import {} from 'iview'
 export default {
-  name: "home",
-  data() {
+  name: 'home',
+  data () {
     return {
-      input10: "",
+      input10: '',
       tableData5: [
         {
-          id: "12987122",
-          name: "好滋好味鸡蛋仔",
-          category: "江浙小吃、小吃零食",
-          desc: "荷兰优质淡奶，奶香浓而不腻",
-          address: "上海市普陀区真北路",
-          shop: "王小虎夫妻店",
-          shopId: "10333"
+          id: '12987122',
+          name: '好滋好味鸡蛋仔',
+          category: '江浙小吃、小吃零食',
+          desc: '荷兰优质淡奶，奶香浓而不腻',
+          address: '上海市普陀区真北路',
+          shop: '王小虎夫妻店',
+          shopId: '10333'
         },
         {
-          id: "12987123",
-          name: "好滋好味鸡蛋仔",
-          category: "江浙小吃、小吃零食",
-          desc: "荷兰优质淡奶，奶香浓而不腻",
-          address: "上海市普陀区真北路",
-          shop: "王小虎夫妻店",
-          shopId: "10333"
+          id: '12987123',
+          name: '好滋好味鸡蛋仔',
+          category: '江浙小吃、小吃零食',
+          desc: '荷兰优质淡奶，奶香浓而不腻',
+          address: '上海市普陀区真北路',
+          shop: '王小虎夫妻店',
+          shopId: '10333'
         },
         {
-          id: "12987125",
-          name: "好滋好味鸡蛋仔",
-          category: "江浙小吃、小吃零食",
-          desc: "荷兰优质淡奶，奶香浓而不腻",
-          address: "上海市普陀区真北路",
-          shop: "王小虎夫妻店",
-          shopId: "10333"
+          id: '12987125',
+          name: '好滋好味鸡蛋仔',
+          category: '江浙小吃、小吃零食',
+          desc: '荷兰优质淡奶，奶香浓而不腻',
+          address: '上海市普陀区真北路',
+          shop: '王小虎夫妻店',
+          shopId: '10333'
         },
         {
-          id: "12987126",
-          name: "好滋好味鸡蛋仔",
-          category: "江浙小吃、小吃零食",
-          desc: "荷兰优质淡奶，奶香浓而不腻",
-          address: "上海市普陀区真北路",
-          shop: "王小虎夫妻店",
-          shopId: "10333"
+          id: '12987126',
+          name: '好滋好味鸡蛋仔',
+          category: '江浙小吃、小吃零食',
+          desc: '荷兰优质淡奶，奶香浓而不腻',
+          address: '上海市普陀区真北路',
+          shop: '王小虎夫妻店',
+          shopId: '10333'
         }
       ]
-    };
-  },
-  methods: {
-    detailCheck(index) {
-      console.log(index);
-      this.$router.replace("./step");
-    },
-    procedure(index) {
-      console.log(this.$refs.hey[index].innerHTML);
-      console.log(this.$refs.hey[index]);
-    },
-    toBitch() {
-      this.$router.replace("./mainPage");
-    },
-    advanceMark(row) {
-      if (
-        row.rowIndex == 3 &&
-        row.columnIndex <= 1 &&
-        row.row.id == "12987126" &&
-        row.row.shopId == "10333"
-      ) {
-        console.log(row.rowIndex, row.columnIndex, row.row.address, row.row.id);
-        return "background-color:orange";
-      }
-    },
-    brand1() {},
-    brand2() {},
-    brand3() {},
-    create() {
-      this.$router.replace("./mainPage");
     }
   },
-  mounted() {}
-};
+  methods: {
+    detailCheck (index) {
+      console.log(index)
+      this.$router.replace('./step')
+    },
+    procedure (index) {
+      console.log(this.$refs.hey[index].innerHTML)
+      console.log(this.$refs.hey[index])
+    },
+    toBitch () {
+      this.$router.replace('./mainPage')
+    },
+    advanceMark (row) {
+      if (
+        row.rowIndex === 3 &&
+        row.columnIndex <= 1 &&
+        row.row.id === '12987126' &&
+        row.row.shopId === '10333'
+      ) {
+        console.log(row.rowIndex, row.columnIndex, row.row.address, row.row.id)
+        return 'background-color:orange'
+      }
+    },
+    brand1 () {},
+    brand2 () {},
+    brand3 () {},
+    create () {
+      this.$router.replace('./mainPage')
+    }
+  },
+  mounted () {}
+}
 </script>
 <style scoped>
 .demo-table-expand {
@@ -208,14 +208,7 @@ export default {
   margin-bottom: 0;
   width: 50%;
 }
-.el-table__body-wrapper
-  /deep/
-  table
-  tbody
-  /deep/
-  tr
-  /deep/
-  td.el-table__expanded-cell {
+.el-table__body-wrapper /deep/ table tbody /deep/ tr /deep/ td.el-table__expanded-cell {
   padding: 20px 0;
 }
 .innerWrapper {
@@ -244,15 +237,13 @@ export default {
 /* body > .el-container {
     margin-bottom: 40px;
   }
-  
+
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
     line-height: 260px;
   }
-  
+
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   } */
 </style>
-
-

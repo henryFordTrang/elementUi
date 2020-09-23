@@ -35,7 +35,7 @@
           </div>
           <el-button @click="gotoPage">取 消</el-button>
         </div>
-        
+
       </el-main>
     </el-container>
     <el-dialog title="提示" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
@@ -83,234 +83,205 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       usersList: [],
       multipleSelection: [],
       dialogFormVisible: false,
-      formLabelWidth: "120px",
+      formLabelWidth: '120px',
       dialogVisible: false,
-      uploadUrl: "",
-      imageUrl: "",
-      name: "",
-      mobile: "",
-      password:"",
-      department: "",
-      position: "",
+      uploadUrl: '',
+      imageUrl: '',
+      name: '',
+      mobile: '',
+      password: '',
+      department: '',
+      position: '',
       options: [
         {
-          value: "黄金糕",
-          label: "黄金糕"
+          value: '黄金糕',
+          label: '黄金糕'
         },
         {
-          value: "双皮奶",
-          label: "双皮奶"
+          value: '双皮奶',
+          label: '双皮奶'
         },
         {
-          value: "蚵仔煎",
-          label: "蚵仔煎"
+          value: '蚵仔煎',
+          label: '蚵仔煎'
         },
         {
-          value: "龙须面",
-          label: "龙须面"
+          value: '龙须面',
+          label: '龙须面'
         },
         {
-          value: "北京烤鸭",
-          label: "北京烤鸭"
+          value: '北京烤鸭',
+          label: '北京烤鸭'
         }
       ],
       postOption: [
         {
-          value: "前端",
-          label: "前端"
+          value: '前端',
+          label: '前端'
         },
         {
-          value: "后端",
-          label: "后端"
+          value: '后端',
+          label: '后端'
         },
         {
-          value: "销售",
-          label: "销售"
+          value: '销售',
+          label: '销售'
         },
         {
-          value: "产品经理",
-          label: "产品经理"
+          value: '产品经理',
+          label: '产品经理'
         },
         {
-          value: "售后",
-          label: "售后"
+          value: '售后',
+          label: '售后'
         }
       ],
-      selected: "",
-      selectedIndex: "",
-      dialogType: 0, //0 新增 1 修改
-      dialogVisible: false,
+      selected: '',
+      selectedIndex: '',
+      dialogType: 0, // 0 新增 1 修改
       form: {
-        icon: "",
-        name: "",
-        post: "",
-        phone: "",
-        password: "",
-        role: ""
+        icon: '',
+        name: '',
+        post: '',
+        phone: '',
+        password: '',
+        role: ''
       },
-      imageUrl: "",
-      uploadUrl: "",
-      options: [
-        {
-          value: 1,
-          label: "黄金糕"
-        },
-        {
-          value: 2,
-          label: "双皮奶"
-        },
-        {
-          value: 3,
-          label: "蚵仔煎"
-        },
-        {
-          value: 4,
-          label: "龙须面"
-        },
-        {
-          value: 5,
-          label: "北京烤鸭"
-        }
-      ],
-      vuexTest:'',
-    };
+      vuexTest: ''
+    }
   },
-  computed: mapGetters(["encryptItm","encryptVal"]),
+  computed: mapGetters(['encryptItm', 'encryptVal']),
   methods: {
-    //选择用户--点击table row
-    chooseUser(row, event, column) {
-      this.$refs.multipleTable.clearSelection();
-      this.$refs.multipleTable.toggleRowSelection(row);
-      this.selected = row;
+    // 选择用户--点击table row
+    chooseUser (row, event, column) {
+      this.$refs.multipleTable.clearSelection()
+      this.$refs.multipleTable.toggleRowSelection(row)
+      this.selected = row
     },
-    //选择用户--点击checkbox
-    chooseUser1(selection, row) {
-      this.$refs.multipleTable.clearSelection();
-      this.$refs.multipleTable.toggleRowSelection(row);
-      this.selected = row;
+    // 选择用户--点击checkbox
+    chooseUser1 (selection, row) {
+      this.$refs.multipleTable.clearSelection()
+      this.$refs.multipleTable.toggleRowSelection(row)
+      this.selected = row
     },
-    //修改用户信息
-    modifyUser() {
-      var _this = this;
+    // 修改用户信息
+    modifyUser () {
+      var _this = this
       if (_this.selected) {
-        _this.selectedIndex = _this.listPosition();
-        _this.dialogType = 1;
-        _this.dialogFormVisible = true;
-        _this.name = _this.selected.name;
-        _this.mobile = _this.selected.phone;
-        _this.department = _this.selected.dpt;
-        _this.position = _this.selected.post;
-        _this.imageUrl = _this.selected.url;
+        _this.selectedIndex = _this.listPosition()
+        _this.dialogType = 1
+        _this.dialogFormVisible = true
+        _this.name = _this.selected.name
+        _this.mobile = _this.selected.phone
+        _this.department = _this.selected.dpt
+        _this.position = _this.selected.post
+        _this.imageUrl = _this.selected.url
       } else {
-        _this.$message.warning("请选择一个用户");
+        _this.$message.warning('请选择一个用户')
       }
     },
-    //删除用户
-    delUser() {
-      var _this = this;
+    // 删除用户
+    delUser () {
+      var _this = this
       if (_this.selected) {
-        _this.selectedIndex = _this.listPosition();
-        _this.usersList.splice(_this.selectedIndex, 1);
-        _this.selected = "";
+        _this.selectedIndex = _this.listPosition()
+        _this.usersList.splice(_this.selectedIndex, 1)
+        _this.selected = ''
       } else {
-        _this.$message.warning("请选择一个用户");
+        _this.$message.warning('请选择一个用户')
       }
     },
-    //根据手机查询用户对象的角标
-    listPosition() {
-      var _this = this;
-      var feedback = "";
+    // 根据手机查询用户对象的角标
+    listPosition () {
+      var _this = this
+      var feedback = ''
       _this.usersList.forEach((item, index) => {
-        if (item.name == _this.selected.name) {
-          feedback = index;
+        if (item.name === _this.selected.name) {
+          feedback = index
         }
-      });
-      return feedback;
+      })
+      return feedback
     },
-    //生成图片上传路径
-    computeUrl() {
-      var _this = this;
-      _this.uploadUrl = _this.$util.basicUrl() + "/api/ts/fileUpload1";
+    // 生成图片上传路径
+    computeUrl () {
+      var _this = this
+      _this.uploadUrl = _this.$util.basicUrl() + '/api/ts/fileUpload1'
     },
-    handleAvatarSuccess(res, file) {
-      console.log(res,file)
-      var _this=this;
-      _this.imageUrl = URL.createObjectURL(file.raw);
-      _this.form.icon = res;
-      
+    handleAvatarSuccess (res, file) {
+      console.log(res, file)
+      var _this = this
+      _this.imageUrl = URL.createObjectURL(file.raw)
+      _this.form.icon = res
     },
 
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
+    beforeAvatarUpload (file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
 
       if (!isJPG) {
-        this.$message.error("Avatar picture must be JPG format!");
+        this.$message.error('Avatar picture must be JPG format!')
       }
       if (!isLt2M) {
-        this.$message.error("Avatar picture size can not exceed 2MB!");
+        this.$message.error('Avatar picture size can not exceed 2MB!')
       }
-      return isJPG && isLt2M;
+      return isJPG && isLt2M
     },
-    gotoPage(){
-      var _this=this;
+    gotoPage () {
+      var _this = this
       _this.$router.replace('/permision')
     },
 
-    onSubmit() {
-      var _this=this;
-      this.dialogVisible = false;
-      var url=_this.$util.basicUrl() + "/api/ts/newUsers";
-      _this.$axios.post(url,_this.form).then((rsp)=>{
-        _this.usersList=rsp.data;
+    onSubmit () {
+      var _this = this
+      this.dialogVisible = false
+      var url = _this.$util.basicUrl() + '/api/ts/newUsers'
+      _this.$axios.post(url, _this.form).then((rsp) => {
+        _this.usersList = rsp.data
       })
     },
-    handleClose(done) {
-      done();
+    handleClose (done) {
+      done()
     },
-    
-    //参数初始化
-    paramInit() {
-      var _this = this;
-      _this.selected="";
-      _this.selectedIndex="";
-      _this.name = "";
-      _this.mobile = "";
-      _this.department = "";
-      _this.position = "";
-    },
-    //计算table高度
-    computeHeight() {
-      var block = $(".table");
-      return block[0] ? block[0].clientHeight : 660;
-    },
-    //加载用户信息
-    loadUsers() {
-      var _this = this;
-      var url=_this.$util.basicUrl()+'/api/ts/queryUsers';
-      _this.$axios.post(url).then((rsp)=>{
-        _this.usersList=rsp.data;
-        console.log(_this.usersList,'======================')
-      })
-    },
-    
-  },
-  mounted() {
-    var _this = this;
-    _this.loadUsers();
-    _this.computeUrl();
-    var item1=_this.encryptItem
-    _this.vuexTest=_this.item1;
 
+    // 参数初始化
+    paramInit () {
+      var _this = this
+      _this.selected = ''
+      _this.selectedIndex = ''
+      _this.name = ''
+      _this.mobile = ''
+      _this.department = ''
+      _this.position = ''
+    },
+    // 计算table高度
+    computeHeight () {
+      var block = $('.table')
+      return block[0] ? block[0].clientHeight : 660
+    },
+    // 加载用户信息
+    loadUsers () {
+      var _this = this
+      var url = _this.$util.basicUrl() + '/api/ts/queryUsers'
+      _this.$axios.post(url).then((rsp) => {
+        _this.usersList = rsp.data
+      })
+    }
+
+  },
+  mounted () {
+    var _this = this
+    _this.loadUsers()
+    _this.computeUrl()
+    _this.vuexTest = _this.item1
   }
-};
+}
 </script>
 <style scoped>
 .el-header,

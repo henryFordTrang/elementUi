@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-<div class="background">        
+<div class="background">
 <div class="line"></div>
 <el-menu
   :default-active="activeIndex2"
@@ -28,16 +28,10 @@
 
 </el-menu>
 
-
-
-
-
-        
-
             <el-row>
-  
+
   <el-button type="primary" plain @click="access">主要按钮</el-button>
-  
+
 </el-row>
 
             <div class="loginBox">
@@ -47,37 +41,35 @@
                 <div class="loginInner">
                     <el-input v-model="input" placeholder="请输入内容"></el-input>
                 </div>
-                
-                
+
             </div>
-            
-            
+
         </div>
     </div>
 </template>
 <script>
 export default {
-    name:'mp',
-    data(){
-        return{
-            input:'',
-            activeIndex: '1',
-            activeIndex2: '1'
-        }
-    },
-
-    methods:{
-        handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
-
-      access(){
-          this.$router.replace('./home');
-      }
-    },
-    mounted(){
-
+  name: 'mp',
+  data () {
+    return {
+      input: '',
+      activeIndex: '1',
+      activeIndex2: '1'
     }
+  },
+
+  methods: {
+    handleSelect (key, keyPath) {
+      console.log(key, keyPath)
+    },
+
+    access () {
+      this.$router.replace('./home')
+    }
+  },
+  mounted () {
+
+  }
 }
 </script>
 <style scoped>
@@ -91,5 +83,3 @@ export default {
     margin-right:10px;
 }
 </style>
-
-

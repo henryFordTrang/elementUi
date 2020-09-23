@@ -12,52 +12,50 @@
         </el-input>
       </div>
       <div>
-          
+
       <el-button type="primary" @click="gotopage">登录</el-button>
       <el-button type="primary" @click="clearRedis">删除</el-button>
-      
+
       </div>
     </div>
   </div>
 </template>
 <script>
-import md5 from 'js-md5';
+import md5 from 'js-md5'
 export default {
-    data(){
-        return{
-            input1:'',
-            input2:'',
-        }
-    },
-    methods:{
-        clearRedis(){
-          var _this=this;
-          var url=_this.$util.basicUrl() + "/admin/delete";
-          _this.$axios.post(url).then((rsp)=>{
-                       
-          })
-        },
-        gotopage(){
-            var _this=this;
-            var url= _this.$util.basicUrl() + "/admin/login";
-            var xxx=md5(_this.input2);
-            console.log(_this.input1,_this.input2,'---------',md5(_this.input2))
-            var mes=Object.assign({
-                phonenumber:_this.input1,
-                upassword:_this.input2
-            })
-            console.log(mes)
-            console.log(md5(_this.input2))
-            //upassword:md5(_this.input2)
-            _this.$axios.post(url,mes).then((rsp)=>{
-               
-            })
-        },        
-    },
-    mounted(){
-     
+  data () {
+    return {
+      input1: '',
+      input2: ''
     }
-};
+  },
+  methods: {
+    clearRedis () {
+      var _this = this
+      var url = _this.$util.basicUrl() + '/admin/delete'
+      _this.$axios.post(url).then((rsp) => {
+
+      })
+    },
+    gotopage () {
+      var _this = this
+      var url = _this.$util.basicUrl() + '/admin/login'
+      var mes = Object.assign({
+        phonenumber: _this.input1,
+        upassword: _this.input2
+      })
+      console.log(mes)
+      console.log(md5(_this.input2))
+      // upassword:md5(_this.input2)
+      _this.$axios.post(url, mes).then((rsp) => {
+
+      })
+    }
+  },
+  mounted () {
+
+  }
+}
 </script>
 <style scoped>
 #app {
